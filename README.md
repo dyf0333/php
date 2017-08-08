@@ -32,4 +32,8 @@
 ### php生命周期
 
 
+### php-fpm的三种进程管理模式
 
+    ondemand、
+    static、
+    dynamic
