@@ -142,3 +142,11 @@ return array(
     'file_size' => $size
 );
 ```
+
+## 补充：
+
+因为有可能文件名是中文,需要下面函数吧文件名转化一下编码 iconv
+
+echo iconv('GB2312', 'UTF-8', $str); //将字符串的编码从GB2312转到UTF-8 
+
+
