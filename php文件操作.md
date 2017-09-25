@@ -148,3 +148,115 @@ if($handle = opendir('./test')){
     }
 }
 ```
+
+## 遍历目录
+
+```
+$dir = './';
+
+if(is_dir($dir)){
+    if($dh = opendir($dir)){
+        while ($file=readdir($dh) !== false) {
+            if($file == '.'|| $file=='..'){
+                continue;
+            }
+            echo "file:{$file}".PHP_EOL;
+            echo "filetype" . filetype($dir.$file) . PHP_EOL;
+        }
+    }
+}
+```
+
+## 遍历目录与子目录
+```
+public function scanAll($dir)
+{
+    if(is_dir($dir)){
+        echo 'DIR'.$dir.PHP_EOL;
+        $child = scandir($dir);
+        foreach ($child as $c) {
+            scanAll($dir . '/' .$c);
+        }
+    }
+
+    if(is_file($dir)){
+        echo 'File:' . $dir .PHP_EOL;
+    }
+}
+
+```
+
+
+## 复制目录
+
+文件：copy函数（注意权限）
+
+    copy($souce ,$dest)
+
+目录：遍历方法
+
+```
+function copyIdr($sourceDir , $destDir)
+{
+    if(!is_dir($sourceDir)){
+        return false;
+    }
+
+
+    if(!is_dir($destDir)){
+        if(!mkdir($destDir)){
+            return false;
+        }
+    }
+
+    $dir = opendir($sourceDir);
+    if(!$dir){
+        return false;
+    }
+
+    while (false!==($file = readdir($dir))) {
+        if($file != '.' && $file != '..'){
+            if(is_dir($sourceDir . '.' . $file)){
+                if(!copydir($sourceDir.'/'.$file,$destDir.'/'.$file)){
+                    return false;
+                }
+            }else{
+                    if(!copy($sourceDir.'/' . $file ,$destDir.'/'.$file)){
+                        return false;
+                    }
+                }
+        }
+    }
+    closedir($dir);
+    return true;
+}
+```
+
+## 删除目录
+
+文件： unlink函数
+
+目录：
+```
+
+function delDir($dir)
+{
+    $dh = opendir($dir);
+    while ($file = readdir($dh)) {
+        if($file != '.' && $file != '..' ){
+            $fullPath = $dir . '/' .$file;
+            if(!is_dir($fullPath)){
+                unlink($fullPath);
+            }else{
+                delDir($fullPath);
+            }
+        }
+    }
+    closedir($dh);
+
+    if(rmdir($dir)){
+        return true;
+    }
+    return false;
+}
+```
